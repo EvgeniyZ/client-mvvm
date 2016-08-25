@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Data.Entity;
 using Data.Repositories;
 using Models;
 
@@ -14,15 +12,12 @@ namespace Data
 
         public virtual DbSet<Client> Clients { get; set; }
 
-        public IList<Client> LoadClients()
-        {
-            return Clients.ToList();
-        }
-
-        public void CreateClient(Client client)
+        public int CreateClient(Client client)
         {
             Clients.Add(client);
             SaveChanges();
+
+            return client.Id;
         }
 
         public void DeleteClient(int id)
@@ -31,6 +26,7 @@ namespace Data
             if (client != null)
             {
                 Clients.Remove(client);
+                SaveChanges();
             }
         }
 

@@ -3,26 +3,64 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Views"
+        xmlns:businessLogic="clr-namespace:BusinessLogic;assembly=BusinessLogic"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="400" MinWidth="430" Width="500">
+    <Window.DataContext>
+        <businessLogic:MainViewModel/>
+    </Window.DataContext>
     <Grid>
-        <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"  
-               Name="PartsDataGrid" VerticalAlignment="Top" ItemsSource="{Binding Clients}" SelectedItem="{Binding SelectedClient, Mode=TwoWay}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" CanUserReorder="True" CanUserResize="True" 
-                             CanUserSort="True" Width="Auto" 
-                             Binding="{Binding Id}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="FirstName" CanUserReorder="True" CanUserResize="True" 
-                             CanUserSort="True" Width="Auto" 
-                             Binding="{Binding FirstName}"/>
-                <DataGridTextColumn Header="LastName" CanUserReorder="True" CanUserResize="True" 
-                             CanUserSort="True" Width="Auto" 
-                             Binding="{Binding LastName}" />
-                <DataGridTextColumn Header="Birthday" CanUserReorder="True" CanUserResize="True" 
-                             CanUserSort="True" Width="Auto" 
-                             Binding="{Binding Birthday}" />
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="200" />
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Left"  
+                   Name="PartsDataGrid" VerticalAlignment="Top" ItemsSource="{Binding ClientListViewModel.Clients}" SelectedItem="{Binding ClientListViewModel.SelectedClient, Mode=TwoWay}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" CanUserReorder="True" CanUserResize="True" 
+                                 CanUserSort="True" Width="Auto" 
+                                 Binding="{Binding Id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="LastName" CanUserReorder="True" CanUserResize="True" 
+                                 CanUserSort="True" Width="Auto" 
+                                 Binding="{Binding LastName}" />
+                    <DataGridTextColumn Header="FirstName" CanUserReorder="True" CanUserResize="True" 
+                                 CanUserSort="True" Width="Auto" 
+                                 Binding="{Binding FirstName}"/>
+                    <DataGridTextColumn Header="Birthday" CanUserReorder="True" CanUserResize="True" 
+                                 CanUserSort="True" Width="Auto" 
+                                 Binding="{Binding Birthday, StringFormat='yyyy-MM-dd'}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="50"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Margin="5" Grid.Row="0">Firstname:</Label>
+                <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Width="100" Text="{Binding SaveClientViewModel.FirstName}"></TextBox>
+                <Label Margin="5" Grid.Row="1" Grid.Column="0">Lastname:</Label>
+                <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Width="100" Text="{Binding SaveClientViewModel.LastName}"></TextBox>
+                <Label Grid.Row="2" Grid.Column="0" Margin="5">Birthday:</Label>
+                <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Width="100" Text="{Binding SaveClientViewModel.Birthday, StringFormat='yyyy-MM-dd'}"></TextBox>
+            </Grid>
+        </StackPanel>
+        <Button Grid.Row="3" Grid.Column="1" Width="100" Content="Save client" Command="{Binding Save}"/>
+        <Button Grid.Row="3" Grid.Column="0" Width="100" Content="Delete selected" Command="{Binding ClientListViewModel.Delete}"></Button>
+   </Grid>
 </Window>

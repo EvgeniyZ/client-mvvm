@@ -10,13 +10,12 @@ namespace Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ClientListViewModel _clientListViewModel;
+        private MainViewModel _mainViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
-            _clientListViewModel = new ClientListViewModel();
-            DataContext = _clientListViewModel;
+            _mainViewModel = (MainViewModel) DataContext;
         }
     }
 }

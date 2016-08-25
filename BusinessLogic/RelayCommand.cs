@@ -5,9 +5,9 @@ namespace BusinessLogic
 {
     public class RelayCommand : ICommand
     {
-        private readonly Action<object> _action;
+        private readonly Action _action;
 
-        public RelayCommand(Action<object> action)
+        public RelayCommand(Action action)
         {
             _action = action;
         }
@@ -23,7 +23,7 @@ namespace BusinessLogic
 
         public void Execute(object parameter)
         {
-            _action(parameter);
+            _action();
         }
 
         #endregion

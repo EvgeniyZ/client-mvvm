@@ -11,9 +11,13 @@ namespace BusinessLogic
     public class ClientListViewModel : INotifyPropertyChanged
     {
         private readonly ObservableCollection<ClientViewModel> _clients = new ObservableCollection<ClientViewModel>();
-        private Client _selectedClient = null;
+        private ClientViewModel _selectedClient = null;
+        private ICommand _deleteCommand;
 
-        public ICommand Add { get; private set; }
+        public ICommand Delete
+        {
+            get { return _deleteCommand ?? (_deleteCommand = new RelayCommand(DeleteSelected)); }
+        }
 
         public ObservableCollection<ClientViewModel> Clients
         {
@@ -23,7 +27,7 @@ namespace BusinessLogic
             }
         }
 
-        public Client SelectedClient
+        public ClientViewModel SelectedClient
         {
             get { return _selectedClient; }
             set
@@ -40,18 +44,6 @@ namespace BusinessLogic
             {
                 context.Clients.ToList().ForEach(x => _clients.Add(new ClientViewModel(x)));
             }
-            Add = new RelayCommand(client =>
-            {
-                using (var context = new ClientsContext())
-                {
-                    var viewModel = client as ClientViewModel;
-                    if (viewModel != null)
-                    {
-                        _clients.Add(viewModel);
-                        context.Clients.Add(viewModel.Client);
-                    }
-                }
-            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -59,6 +51,19 @@ namespace BusinessLogic
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void DeleteSelected()
+        {
+            if (SelectedClient != null)
+            {
+                using (var context = new ClientsContext())
+                {
+                    context.DeleteClient(SelectedClient.Id);
+                }
+                _clients.Remove(SelectedClient);
+                SelectedClient = null;
+            }
         }
     }
 }
